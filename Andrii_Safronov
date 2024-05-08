@@ -1,0 +1,33 @@
+from collections import Counter
+from PIL import Image
+
+def load_image_info(file_path):
+    try:
+        image = Image.open(file_path)
+        width, height = image.size
+        pixels = list(image.getdata())
+        unique_colors = set(pixels)
+        most_common_color, most_common_count = Counter(pixels).most_common(1)[0]
+        num_unique_colors = len(unique_colors)
+        return width, height, most_common_color, most_common_count, num_unique_colors
+    except Exception as e:
+        print(f"Nie udało się otworzyć pliku: {e}")
+        return None
+
+def main():
+    while True:
+        file_path = input("Podaj ścieżkę do pliku graficznego (PPM, PGM lub PBM): ")
+        image_info = load_image_info(file_path)
+        if image_info:
+            width, height, most_common_color, most_common_count, num_unique_colors = image_info
+            print(f"Szerokość obrazu: {width}")
+            print(f"Wysokość obrazu: {height}")
+            print(f"Najczęściej występujący kolor: {most_common_color}, ilość wystąpień: {most_common_count}")
+            print(f"Ilość unikalnych kolorów: {num_unique_colors}")
+        
+        choice = input("Czy chcesz podać kolejny plik? (tak/nie): ")
+        if choice.lower() != 'tak':
+            break
+
+if __name__ == "__main__":
+    main()
